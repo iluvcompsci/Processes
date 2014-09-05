@@ -13,8 +13,9 @@
 #import <sys/syslog.h>
 #import <sys/types.h>
 #import <sys/sysctl.h>
-@interface BCCViewController ()
-
+@interface BCCViewController () <UITableViewDataSource, UITableViewDelegate>
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) NSArray *processes;
 @end
 
 @implementation BCCViewController
@@ -23,7 +24,25 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    
+    [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateProcesses) userInfo:nil repeats:YES];
+
+//    [self updateProcesses];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *cellIdentifier = @"process cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if(cell == nil)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+    }
+    NSInteger row = [indexPath row];
+    cell.textLabel.text = [[self.processes objectAtIndex:row] objectForKey:@"ProcessName"];
+    cell.detailTextLabel.text = [[self.processes objectAtIndex:row] objectForKey:@"ProcessID"];
+    return cell;
+}
+
+- (void)updateProcesses {
     int mib[4] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0};
     size_t miblen = 4;
     
@@ -62,16 +81,24 @@
                     NSString * processID = [[NSString alloc] initWithFormat:@"%d", process[i].kp_proc.p_pid];
                     NSString * processName = [[NSString alloc] initWithFormat:@"%s", process[i].kp_proc.p_comm];
                     
+                    
+                    
                     NSDictionary * dict = [[NSDictionary alloc] initWithObjects:[NSArray arrayWithObjects:processID, processName, nil]
                                                                         forKeys:[NSArray arrayWithObjects:@"ProcessID", @"ProcessName", nil]];
                     [array addObject:dict];
                 }
                 
                 free(process);
-                NSLog(@"System pid: %@", array);
+//                NSLog(@"System pid: %@", array);
+                self.processes = array;
+                [self.tableView reloadData];
             }
         }
     }
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self.processes count];
 }
 
 - (void)didReceiveMemoryWarning

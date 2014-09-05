@@ -395,6 +395,7 @@
 				GCC_PREFIX_HEADER = "Processes/Processes-Prefix.pch";
 				INFOPLIST_FILE = "Processes/Processes-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -408,6 +409,7 @@
 				GCC_PREFIX_HEADER = "Processes/Processes-Prefix.pch";
 				INFOPLIST_FILE = "Processes/Processes-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -471,6 +473,7 @@
 				709B4DBB19BA2C6E00887F7F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		709B4DBC19BA2C6E00887F7F /* Build configuration list for PBXNativeTarget "ProcessesTests" */ = {
 			isa = XCConfigurationList;
@@ -479,6 +482,7 @@
 				709B4DBE19BA2C6E00887F7F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
